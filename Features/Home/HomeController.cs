@@ -1,9 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using INFT.Models;
+using Artisans.ViewModels;
 
-namespace INFT.Controllers;
-
+namespace Artisans.Features.Home;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

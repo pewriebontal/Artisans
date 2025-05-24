@@ -1,0 +1,119 @@
+@model Artisans.Features.ArtisanProducts.ViewModels.ArtisanDashboardViewModel
+@{
+    ViewData["Title"] = "My Store Dashboard";
+}
+
+<h1>@Model.ArtisanProfile?.BrandName - Store Dashboard</h1>
+
+@if (!Model.ArtisanProfile?.IsApproved ?? true) // Also true if profile is null
+{
+    <div class="alert alert-warning" role="alert">
+        Your artisan profile is pending administrator approval or is not yet fully set up. You can manage your items, but they will not be publicly visible until approved.
+        @if (Model.ArtisanProfile == null)
+        {
+            <span>Please complete your profile registration or contact support.</span>
+        }
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+ @if (TempData["WarningMessage"] != null && (Model.ArtisanProfile?.IsApproved ?? false)) // Only show general warning if profile is approved but other warning exists
+{
+    <div class="alert alert-warning">@TempData["WarningMessage"]</div>
+}
+
+
+<hr />
+
+<h2>My Products</h2>
+<p>
+    <a asp-action="CreateProduct" class="btn btn-primary">Add New Product</a>
+</p>
+@if (!Model.Products.Any())
+{
+    <p>You have not added any products yet.</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Active</th>
+                <th>Last Updated</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@(item.Category?.Name ?? "N/A")</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@Html.DisplayFor(modelItem => item.StockQuantity)</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td>@item.LastUpdated.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="EditProduct" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a asp-action="DeleteProduct" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+
+<h2>My Materials</h2>
+<p>
+    <a asp-action="CreateMaterial" class="btn btn-primary">Add New Material</a>
+</p>
+@if (!Model.Materials.Any())
+{
+    <p>You have not added any materials yet.</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price Per Unit</th>
+                <th>Unit</th>
+                <th>Stock</th>
+                <th>Active</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Materials)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@(item.Category?.Name ?? "N/A")</td>
+                    <td>@item.PricePerUnit.ToString("C")</td>
+                    <td>@Html.DisplayFor(modelItem => item.UnitOfMeasure)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StockQuantity)</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td>
+                        <a asp-action="EditMaterial" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a asp-action="DeleteMaterial" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

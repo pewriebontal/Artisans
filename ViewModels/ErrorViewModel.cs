@@ -1,4 +1,4 @@
-namespace INFT.Models;
+namespace Artisans.ViewModels;
 
 public class ErrorViewModel
 {
