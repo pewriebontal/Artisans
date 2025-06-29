@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Artisans.Features.ArtisanProducts
 {
-    [Authorize(Roles = "Artisan")] // Only allow users in the "Artisan" role
+    [Authorize(Roles = "Artisan")] 
     public class ArtisanProductsController : Controller
     {
         private readonly ArtisansDBContext _context;
@@ -23,13 +23,13 @@ namespace Artisans.Features.ArtisanProducts
             _userManager = userManager;
         }
 
-        // GET: ArtisanProducts (Dashboard for the artisan)
+        
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                // This should ideally not happen due to [Authorize]
+                
                 return Challenge(); 
             }
 
@@ -61,7 +61,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(viewModel);
         }
 
-        // Helper method to populate categories for dropdowns
+        
         private async Task PopulateCategoriesDropDownListAsync(object? selectedCategory = null)
         {
             var categoriesQuery = from c in _context.Categories
@@ -70,9 +70,9 @@ namespace Artisans.Features.ArtisanProducts
             ViewBag.Categories = new SelectList(await categoriesQuery.AsNoTracking().ToListAsync(), "Id", "Name", selectedCategory);
         }
 
-        // --- PRODUCT MANAGEMENT ---
+        
 
-        // GET: ArtisanProducts/CreateProduct
+        
         public async Task<IActionResult> CreateProduct()
         {
             await PopulateCategoriesDropDownListAsync();
@@ -80,7 +80,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(model);
         }
 
-        // POST: ArtisanProducts/CreateProduct
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(ProductViewModel model)
@@ -104,7 +104,7 @@ namespace Artisans.Features.ArtisanProducts
                     Description = model.Description,
                     Price = model.Price,
                     StockQuantity = model.StockQuantity,
-                    CategoryId = model.CategoryId == 0 ? null : model.CategoryId, // Handle "no category"
+                    CategoryId = model.CategoryId == 0 ? null : model.CategoryId, 
                     MainImageUrl = model.MainImageUrl,
                     StoryDetailsText = model.StoryDetailsText,
                     ProcessImageUrl1 = model.ProcessImageUrl1,
@@ -122,7 +122,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(model);
         }
 
-        // GET: ArtisanProducts/EditProduct/5
+        
         public async Task<IActionResult> EditProduct(int? id)
         {
             if (id == null) return NotFound();
@@ -152,7 +152,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(viewModel);
         }
 
-        // POST: ArtisanProducts/EditProduct/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProduct(int id, ProductViewModel model)
@@ -197,7 +197,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(model);
         }
 
-        // GET: ArtisanProducts/DeleteProduct/5
+        
         public async Task<IActionResult> DeleteProduct(int? id)
         {
             if (id == null) return NotFound();
@@ -207,7 +207,7 @@ namespace Artisans.Features.ArtisanProducts
             if (artisanProfile == null) return Forbid();
 
             var product = await _context.Products
-                .Include(p => p.Category) // For display on confirmation page
+                .Include(p => p.Category) 
                 .FirstOrDefaultAsync(m => m.Id == id && m.ArtisanProfileId == artisanProfile.Id);
             
             if (product == null) return NotFound();
@@ -215,7 +215,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(product); 
         }
 
-        // POST: ArtisanProducts/DeleteProduct/5
+        
         [HttpPost, ActionName("DeleteProduct")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProductConfirmed(int id)
@@ -238,9 +238,9 @@ namespace Artisans.Features.ArtisanProducts
             return RedirectToAction(nameof(Index));
         }
 
-        // --- MATERIAL MANAGEMENT ---
+        
 
-        // GET: ArtisanProducts/CreateMaterial
+        
         public async Task<IActionResult> CreateMaterial()
         {
             await PopulateCategoriesDropDownListAsync();
@@ -248,7 +248,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(model);
         }
 
-        // POST: ArtisanProducts/CreateMaterial
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMaterial(MaterialViewModel model)
@@ -286,7 +286,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(model);
         }
         
-        // GET: ArtisanProducts/EditMaterial/5
+        
         public async Task<IActionResult> EditMaterial(int? id)
         {
             if (id == null) return NotFound();
@@ -314,7 +314,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(viewModel);
         }
 
-        // POST: ArtisanProducts/EditMaterial/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditMaterial(int id, MaterialViewModel model)
@@ -340,7 +340,7 @@ namespace Artisans.Features.ArtisanProducts
                     materialToUpdate.CategoryId = model.CategoryId == 0 ? null : model.CategoryId;
                     materialToUpdate.ImageUrl = model.ImageUrl;
                     materialToUpdate.IsActive = model.IsActive;
-                    // materialToUpdate.DateAdded is not updated on edit. Add LastUpdated to Material if needed.
+                    
 
                     _context.Update(materialToUpdate);
                     await _context.SaveChangesAsync();
@@ -357,7 +357,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(model);
         }
 
-        // GET: ArtisanProducts/DeleteMaterial/5
+        
         public async Task<IActionResult> DeleteMaterial(int? id)
         {
             if (id == null) return NotFound();
@@ -367,7 +367,7 @@ namespace Artisans.Features.ArtisanProducts
             if (artisanProfile == null) return Forbid();
 
             var material = await _context.Materials
-                .Include(m => m.Category) // For display
+                .Include(m => m.Category) 
                 .FirstOrDefaultAsync(m => m.Id == id && m.SupplierArtisanProfileId == artisanProfile.Id);
             
             if (material == null) return NotFound();
@@ -375,7 +375,7 @@ namespace Artisans.Features.ArtisanProducts
             return View(material);
         }
 
-        // POST: ArtisanProducts/DeleteMaterial/5
+        
         [HttpPost, ActionName("DeleteMaterial")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteMaterialConfirmed(int id)

@@ -1,0 +1,79 @@
+@* Features/Browse/Views/Products.cshtml *@
+@model IEnumerable<Artisans.Core.Entities.Product>
+@{
+    ViewData["Title"] = "Browse Products";
+    var allCategories = ViewBag.AllCategories as List<Artisans.Core.Entities.Category>;
+    var selectedCategory = ViewData["SelectedCategory"] as Artisans.Core.Entities.Category;
+    var searchQuery = ViewData["SearchQuery"] as string;
+}
+
+<h1>@ViewData["Title"] @(selectedCategory != null ? "- " + selectedCategory.Name : "")</h1>
+<p>Discover unique products from Myanmar's talented artisans.</p>
+
+<form asp-action="Products" method="get" class="row g-3 mb-4 align-items-center">
+    <div class="col-md-4">
+        <label for="categoryId" class="form-label">Filter by Category:</label>
+        <select name="categoryId" id="categoryId" class="form-select" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            @if (allCategories != null)
+            {
+                @foreach (var cat in allCategories)
+                {
+                    <option value="@cat.Id" selected="@(selectedCategory?.Id == cat.Id)">@cat.Name</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label for="searchQuery" class="form-label">Search:</label>
+        <input type="text" name="searchQuery" id="searchQuery" value="@searchQuery" class="form-control" placeholder="Search products, brands..." />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary me-2">Search</button>
+        <a asp-action="Products" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
+
+@if (!Model.Any())
+{
+    <p>No products found matching your criteria. Try a different search or category!</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(item.MainImageUrl))
+                    {
+                        <img src="@item.MainImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/300x200.png?text=No+Image" class="card-img-top" alt="No Image Available" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">
+                            <small class="text-muted">by 
+                                <a asp-action="ArtisanStore" asp-route-id="@item.ArtisanProfileId">@Html.DisplayFor(modelItem => item.ArtisanProfile.BrandName)</a>
+                            </small><br/>
+                            @if(item.Category != null)
+                            {
+                                <span class="badge bg-secondary">@item.Category.Name</span>
+                            }
+                        </p>
+                        <p class="card-text lead">@item.Price.ToString("C")</p>
+                        <p class="card-text"><small>@item.Description.Substring(0, Math.Min(item.Description.Length, 100))...</small></p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="ProductDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">View Details</a>
+                        @* Add to Cart button would go here later *@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -5,7 +5,7 @@ namespace Artisans.Features.Account.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Username or Email")] // Allow login with either
+        [Display(Name = "Username or Email")] 
         public string UserNameOrEmail { get; set; } = string.Empty;
 
         [Required]

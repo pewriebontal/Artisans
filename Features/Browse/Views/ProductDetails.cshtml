@@ -1,0 +1,58 @@
+@* Features/Browse/Views/ProductDetails.cshtml *@
+@model Artisans.Core.Entities.Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Html.DisplayFor(model => model.Name)</h1>
+<p class="text-muted">By <a asp-action="ArtisanStore" asp-route-id="@Model.ArtisanProfileId">@Model.ArtisanProfile.BrandName</a>
+    @if(Model.Category != null) { <span>in <a asp-action="Products" asp-route-categoryId="@Model.CategoryId">@Model.Category.Name</a></span> }
+</p>
+
+<hr />
+<div class="row">
+    <div class="col-md-7">
+        @if (!string.IsNullOrEmpty(Model.MainImageUrl))
+        {
+            <img src="@Model.MainImageUrl" alt="@Model.Name" class="img-fluid rounded mb-3" />
+        }
+        else
+        {
+            <img src="https://via.placeholder.com/600x400.png?text=No+Image" class="img-fluid rounded mb-3" alt="No Image Available" />
+        }
+    </div>
+    <div class="col-md-5">
+        <h4>Details</h4>
+        <p>@Html.Raw(Model.Description.Replace("\n", "<br />"))</p> @* Preserve line breaks *@
+        <h3 class="text-primary my-3">@Model.Price.ToString("C")</h3>
+        <p>Stock: @Model.StockQuantity</p>
+        @* Add to Cart Button Here Later *@
+        <a asp-action="Products" class="btn btn-outline-secondary mt-3">Back to Products</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.StoryDetailsText) || !string.IsNullOrWhiteSpace(Model.ProcessImageUrl1) || !string.IsNullOrWhiteSpace(Model.ProcessImageUrl2))
+{
+    <hr class="my-4"/>
+    <div class="journey-of-creation mt-4">
+        <h3>The Journey of Creation</h3>
+        @if (!string.IsNullOrWhiteSpace(Model.StoryDetailsText))
+        {
+            <p>@Html.Raw(Model.StoryDetailsText.Replace("\n", "<br />"))</p>
+        }
+        <div class="row mt-3 g-3">
+            @if (!string.IsNullOrEmpty(Model.ProcessImageUrl1))
+            {
+                <div class="col-md-6">
+                     <img src="@Model.ProcessImageUrl1" alt="Process Image 1" class="img-fluid rounded" />
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.ProcessImageUrl2))
+            {
+                <div class="col-md-6">
+                     <img src="@Model.ProcessImageUrl2" alt="Process Image 2" class="img-fluid rounded" />
+                </div>
+            }
+        </div>
+    </div>
+}

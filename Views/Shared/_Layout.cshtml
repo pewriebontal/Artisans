@@ -57,6 +57,9 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Orders" asp-action="MyOrders">My Orders</a>
+                            </li>
+                            <li class="nav-item">
                                 <span class="navbar-text text-dark me-3">Hello @UserManager.GetUserName(User)!</span>
                             </li>
                             <li class="nav-item">

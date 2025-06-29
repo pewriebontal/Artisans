@@ -6,7 +6,7 @@ namespace Artisans.Features.ArtisanProducts.ViewModels
 {
     public class ProductViewModel
     {
-        public int Id { get; set; } // For Edit
+        public int Id { get; set; } 
 
         [Required]
         [StringLength(200, MinimumLength = 3)]
@@ -29,7 +29,7 @@ namespace Artisans.Features.ArtisanProducts.ViewModels
 
         [Display(Name = "Category")]
         public int? CategoryId { get; set; }
-        public SelectList? Categories { get; set; } // For dropdown
+        public SelectList? Categories { get; set; } 
 
         [Display(Name = "Main Image URL")]
         [DataType(DataType.ImageUrl)]

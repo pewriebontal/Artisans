@@ -67,14 +67,14 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#Role').change(function () {
-                if ($(this).val() == '@((int)Artisans.Core.Enums.UserRoleType.Artisan)') { // Compare with integer value of enum
+                if ($(this).val() == '@((int)Artisans.Core.Enums.UserRoleType.Artisan)') { 
                     $('#artisanFields').show();
                 } else {
                     $('#artisanFields').hide();
-                    $('#BrandName').val(''); // Clear fields if role changes
+                    $('#BrandName').val(''); 
                     $('#Bio').val('');
                 }
-            }).trigger('change'); // Trigger on load in case of validation failure and page reload
+            }).trigger('change'); 
         });
     </script>
 }

@@ -30,7 +30,7 @@ namespace Artisans.Features.Account.ViewModels
         [Display(Name = "Register as")]
         public UserRoleType Role { get; set; } = UserRoleType.Buyer;
 
-        // Optional fields for Artisan registration (can be collected later or here)
+        
         [Display(Name = "Brand Name (if registering as Artisan)")]
         [StringLength(100)]
         public string? BrandName { get; set; }

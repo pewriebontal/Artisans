@@ -6,11 +6,11 @@ namespace Artisans.Core.Entities
 {
     public class Order
     {
-        public int Id { get; set; } // Primary Key
+        public int Id { get; set; } 
 
         [Required]
-        public int BuyerUserId { get; set; } // Foreign Key to User
-        public virtual User BuyerUser { get; set; } = null!; // Navigation Property
+        public int BuyerUserId { get; set; } 
+        public virtual User BuyerUser { get; set; } = null!; 
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
@@ -18,7 +18,7 @@ namespace Artisans.Core.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 
-        // Simplified shipping info for now
+        
         [Required]
         [StringLength(200)]
         public string ShippingAddress { get; set; } = string.Empty;

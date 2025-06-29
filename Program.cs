@@ -5,16 +5,13 @@ using Artisans.Core.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DbContext
 var connectionString = builder.Configuration.GetConnectionString("ArtisansDBConnection");
 builder.Services.AddDbContext<ArtisansDBContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Add ASP.NET Core Identity
-builder.Services.AddIdentity<User, Role>(options => // Specify User and Role classes
+builder.Services.AddIdentity<User, Role>(options => 
 {
-    // Configure Identity options here if needed (e.g., password complexity)
-    options.SignIn.RequireConfirmedAccount = false; // False is simpler. True for production.
+    options.SignIn.RequireConfirmedAccount = false; 
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -23,9 +20,16 @@ builder.Services.AddIdentity<User, Role>(options => // Specify User and Role cla
     options.Password.RequiredUniqueChars = 1;
 })
 .AddEntityFrameworkStores<ArtisansDBContext>()
-.AddDefaultTokenProviders(); // For things like password reset tokens
+.AddDefaultTokenProviders(); 
 
-// Add services to the container.
+builder.Services.AddDistributedMemoryCache(); 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
@@ -35,7 +39,6 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
     });
 
-// Configure application cookie (important for web apps)
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login"; 
@@ -43,10 +46,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -54,7 +55,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // Standard way to serve files from wwwroot
+app.UseStaticFiles(); 
+
+app.UseSession();
 
 app.UseRouting();
 
@@ -65,7 +68,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Seed Roles and Admin User (do this once at startup)
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -84,7 +87,7 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-// Helper method to seed Identity data
+
 async Task SeedIdentityDataAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
 {
     string[] roleNames = { "Admin", "Artisan", "Buyer", "Influencer" };
@@ -101,14 +104,14 @@ async Task SeedIdentityDataAsync(UserManager<User> userManager, RoleManager<Role
     {
         var adminUser = new User
         {
-            UserName = "admin", // Or use email as UserName
+            UserName = "admin", 
             Email = adminEmail,
-            EmailConfirmed = true, // Confirm email for simplicity in dev
+            EmailConfirmed = true, 
             CustomRole = Artisans.Core.Enums.UserRoleType.Admin,
-            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc), // Static date
+            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             IsActive = true
         };
-        var result = await userManager.CreateAsync(adminUser, "AdminPa$$w0rd"); // default password
+        var result = await userManager.CreateAsync(adminUser, "AdminPa$$w0rd");
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");

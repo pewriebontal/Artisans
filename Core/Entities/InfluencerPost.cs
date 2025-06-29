@@ -4,11 +4,11 @@ namespace Artisans.Core.Entities
 {
     public class InfluencerPost
     {
-        public int Id { get; set; } // Primary Key
+        public int Id { get; set; } 
 
         [Required]
-        public int InfluencerUserId { get; set; } // Foreign Key to User (with Influencer role)
-        public virtual User InfluencerUser { get; set; } = null!; // Navigation Property
+        public int InfluencerUserId { get; set; } 
+        public virtual User InfluencerUser { get; set; } = null!; 
 
         [Required]
         public string ImageUrl { get; set; } = string.Empty;
@@ -19,7 +19,7 @@ namespace Artisans.Core.Entities
         public DateTime UploadTimestamp { get; set; } = DateTime.UtcNow;
         public bool IsApproved { get; set; } = false;
         public DateTime? ApprovalTimestamp { get; set; }
-        public int? ApprovedByAdminUserId { get; set; } // Optional: track who approved
+        public int? ApprovedByAdminUserId { get; set; } 
 
         public virtual ICollection<PostTag> Tags { get; set; } = new List<PostTag>();
     }

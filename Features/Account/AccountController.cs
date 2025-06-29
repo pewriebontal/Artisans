@@ -28,7 +28,7 @@ namespace Artisans.Features.Account
             _context = context;
         }
 
-        // GET: /Account/Register
+        
         [HttpGet]
         public IActionResult Register(string? returnUrl = null)
         {
@@ -36,7 +36,7 @@ namespace Artisans.Features.Account
             return View();
         }
 
-        // POST: /Account/Register
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl = null)
@@ -72,8 +72,8 @@ namespace Artisans.Features.Account
                         if (string.IsNullOrWhiteSpace(model.BrandName))
                         {
                             ModelState.AddModelError(nameof(model.BrandName), "Brand Name is required for Artisans.");
-                            // Consider deleting the user if profile creation fails and is mandatory
-                            // await _userManager.DeleteAsync(user); 
+                            
+                            
                             return View(model);
                         }
                         var artisanProfile = new ArtisanProfile
@@ -95,7 +95,7 @@ namespace Artisans.Features.Account
             return View(model);
         }
 
-        // GET: /Account/Login
+        
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
@@ -103,7 +103,7 @@ namespace Artisans.Features.Account
             return View();
         }
 
-        // POST: /Account/Login
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
@@ -120,16 +120,16 @@ namespace Artisans.Features.Account
                     {
                         if (await _userManager.IsInRoleAsync(user, "Admin"))
                         {
-                            // We don't have an Admin area/Dashboard controller yet, so redirect to Home for now
-                            return RedirectToAction("Index", "Home", new { area = "" }); // <<< Placeholder
+                            
+                            return RedirectToAction("Index", "Home", new { area = "" }); 
                         }
                         else if (await _userManager.IsInRoleAsync(user, "Artisan"))
                         {
                             var artisanProfile = await _context.ArtisanProfiles.FirstOrDefaultAsync(ap => ap.UserId == user.Id);
                             if (artisanProfile != null && artisanProfile.IsApproved)
                             {
-                                // We don't have ArtisanProducts controller yet, so redirect to Home for now
-                                return RedirectToAction("Index", "Home", new { area = "" }); // <<< Placeholder
+                                
+                                return RedirectToAction("Index", "Home", new { area = "" }); 
                             }
                             else
                             {
@@ -155,16 +155,16 @@ namespace Artisans.Features.Account
             return View(model);
         }
 
-        // POST: /Account/Logout
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home", new { area = "" }); // <<<< CORRECTED
+            return RedirectToAction("Index", "Home", new { area = "" }); 
         }
 
-        // GET: /Account/AccessDenied
+        
         [HttpGet]
         public IActionResult AccessDenied()
         {

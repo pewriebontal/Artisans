@@ -5,7 +5,7 @@ using Artisans.Core.Entities;
 
 namespace Artisans.Infrastructure.Data
 {
-    // Inherit from IdentityDbContext, specifying User, Role, and key type (int)
+    
     public class ArtisansDBContext : IdentityDbContext<User, Role, int,
                                        IdentityUserClaim<int>, IdentityUserRole<int>,
                                        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
@@ -14,8 +14,8 @@ namespace Artisans.Infrastructure.Data
         {
         }
 
-        // IdentityDbContext will provide DbSets for Users, Roles, UserRoles, etc.
-        // public DbSet<User> AppUsers { get; set; } 
+        
+        
 
         public DbSet<ArtisanProfile> ArtisanProfiles { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -28,9 +28,9 @@ namespace Artisans.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // VERY IMPORTANT: Call base.OnModelCreating() FIRST for Identity
+            base.OnModelCreating(modelBuilder); 
 
-            // User to ArtisanProfile
+            
             modelBuilder.Entity<User>()
                 .HasOne(u => u.ArtisanProfile)
                 .WithOne(ap => ap.User)
@@ -51,12 +51,12 @@ namespace Artisans.Infrastructure.Data
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // PostTag configuration
+            
             modelBuilder.Entity<PostTag>()
                 .HasOne(pt => pt.InfluencerPost)
                 .WithMany(ip => ip.Tags)
                 .HasForeignKey(pt => pt.InfluencerPostId)
-                .OnDelete(DeleteBehavior.Cascade); // If an InfluencerPost is deleted, its tags are deleted.
+                .OnDelete(DeleteBehavior.Cascade); 
 
             modelBuilder.Entity<PostTag>()
                 .HasOne(pt => pt.TaggedArtisanProfile)
@@ -64,10 +64,10 @@ namespace Artisans.Infrastructure.Data
                 .HasForeignKey(pt => pt.TaggedArtisanProfileId)
                 .OnDelete(DeleteBehavior.Restrict); 
 
-            // Rename Identity tables if desired (optional, but can be good for consistency)
-            // For example:
-            modelBuilder.Entity<User>().ToTable("Users"); // Default is AspNetUsers
-            modelBuilder.Entity<Role>().ToTable("Roles"); // Default is AspNetRoles
+            
+            
+            modelBuilder.Entity<User>().ToTable("Users"); 
+            modelBuilder.Entity<Role>().ToTable("Roles"); 
             modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
             modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
@@ -75,9 +75,9 @@ namespace Artisans.Infrastructure.Data
             modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
 
-            // Seed Data - Categories (Admin User will be seeded differently with Identity)
+            
             SeedCategories(modelBuilder);
-            // We will seed roles and the admin user in Program.cs or a dedicated seeder after Identity services are up.
+            
         }
 
         private void SeedCategories(ModelBuilder modelBuilder) 

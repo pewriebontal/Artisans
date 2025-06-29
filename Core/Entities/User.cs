@@ -13,9 +13,7 @@ namespace Artisans.Core.Entities
         // PasswordHash
         // PhoneNumber, etc.
 
-        // Custom properties we want to keep:
-        public UserRoleType CustomRole { get; set; } // We'll manage this via Identity Roles system primarily,
-                                                     // but can keep it for easy access if needed, or remove if redundant
+        public UserRoleType CustomRole { get; set; } 
         public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true;
 

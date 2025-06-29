@@ -5,7 +5,7 @@
 
 <h1>@Model.ArtisanProfile?.BrandName - Store Dashboard</h1>
 
-@if (!Model.ArtisanProfile?.IsApproved ?? true) // Also true if profile is null
+@if (!Model.ArtisanProfile?.IsApproved ?? true) 
 {
     <div class="alert alert-warning" role="alert">
         Your artisan profile is pending administrator approval or is not yet fully set up. You can manage your items, but they will not be publicly visible until approved.
@@ -24,7 +24,7 @@
 {
     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
 }
- @if (TempData["WarningMessage"] != null && (Model.ArtisanProfile?.IsApproved ?? false)) // Only show general warning if profile is approved but other warning exists
+ @if (TempData["WarningMessage"] != null && (Model.ArtisanProfile?.IsApproved ?? false)) 
 {
     <div class="alert alert-warning">@TempData["WarningMessage"]</div>
 }

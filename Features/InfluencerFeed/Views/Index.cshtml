@@ -1,0 +1,49 @@
+@* Features/InfluencerFeed/Views/Index.cshtml *@
+@model IEnumerable<Artisans.Core.Entities.InfluencerPost>
+@{
+    ViewData["Title"] = "For You - Artisan Showcase";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Discover local brands styled by our community!</p>
+
+@if (!Model.Any())
+{
+    <p>No posts to display yet. Check back soon!</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var post in Model)
+        {
+            <div class="col">
+                <div class="card">
+                    <img src="@post.ImageUrl" class="card-img-top" alt="Influencer post" style="max-height: 300px; object-fit: cover;">
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(post.Caption))
+                        {
+                            <p class="card-text">@post.Caption</p>
+                        }
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Posted by: @post.InfluencerUser.UserName on @post.UploadTimestamp.ToShortDateString()
+                            </small>
+                        </p>
+                        @if (post.Tags.Any())
+                        {
+                            <p class="card-text">
+                                <strong>Tagged Brands:</strong><br/>
+                                @foreach (var tag in post.Tags)
+                                {
+                                    <a asp-controller="Browse" asp-action="ArtisanStore" asp-route-id="@tag.TaggedArtisanProfileId" class="badge bg-info text-dark me-1">
+                                        @tag.TaggedArtisanProfile.BrandName
+                                    </a>
+                                }
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

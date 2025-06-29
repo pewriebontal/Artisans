@@ -5,14 +5,14 @@ namespace Artisans.Core.Entities
 {
     public class Material
     {
-        public int Id { get; set; } // Primary Key
+        public int Id { get; set; } 
 
         [Required]
-        public int SupplierArtisanProfileId { get; set; } // Foreign Key to ArtisanProfile (assuming artisans can also be material suppliers)
-        public virtual ArtisanProfile SupplierArtisanProfile { get; set; } = null!; // Navigation Property
+        public int SupplierArtisanProfileId { get; set; } 
+        public virtual ArtisanProfile SupplierArtisanProfile { get; set; } = null!; 
 
-        public int? CategoryId { get; set; } // Foreign Key to Category
-        public virtual Category? Category { get; set; } // Navigation Property
+        public int? CategoryId { get; set; } 
+        public virtual Category? Category { get; set; } 
 
         [Required]
         [StringLength(200)]
@@ -27,7 +27,7 @@ namespace Artisans.Core.Entities
 
         [Required]
         [StringLength(50)]
-        public string UnitOfMeasure { get; set; } = string.Empty; // e.g., "meter", "yard", "piece"
+        public string UnitOfMeasure { get; set; } = string.Empty; 
 
         public int StockQuantity { get; set; } = 0;
         public string? ImageUrl { get; set; }

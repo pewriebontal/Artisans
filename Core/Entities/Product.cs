@@ -5,14 +5,14 @@ namespace Artisans.Core.Entities
 {
     public class Product
     {
-        public int Id { get; set; } // Primary Key
+        public int Id { get; set; } 
 
         [Required]
-        public int ArtisanProfileId { get; set; } // Foreign Key to ArtisanProfile
-        public virtual ArtisanProfile ArtisanProfile { get; set; } = null!; // Navigation Property
+        public int ArtisanProfileId { get; set; } 
+        public virtual ArtisanProfile ArtisanProfile { get; set; } = null!; 
 
-        public int? CategoryId { get; set; } // Foreign Key to Category (nullable if some products don't fit categories)
-        public virtual Category? Category { get; set; } // Navigation Property
+        public int? CategoryId { get; set; } 
+        public virtual Category? Category { get; set; } 
 
         [Required]
         [StringLength(200)]
@@ -36,7 +36,7 @@ namespace Artisans.Core.Entities
 
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
-        public bool IsActive { get; set; } = true; // For soft delete/hiding
+        public bool IsActive { get; set; } = true; 
 
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();

@@ -1,0 +1,49 @@
+@* Features/InfluencerFeed/Views/InfluencerPost/MyPosts.cshtml *@
+@model IEnumerable<Artisans.Core.Entities.InfluencerPost>
+@{
+    ViewData["Title"] = "My Submitted Posts";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p><a asp-action="Create" class="btn btn-primary">Create New Post</a></p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (!Model.Any())
+{
+    <p>You haven't submitted any posts yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Caption</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Tagged Brands</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.ImageUrl" alt="Post image" style="width: 100px; height: auto;" /></td>
+                    <td>@Html.DisplayFor(modelItem => item.Caption)</td>
+                    <td>@(item.IsApproved ? "Approved" : "Pending Approval")</td>
+                    <td>@item.UploadTimestamp.ToShortDateString()</td>
+                    <td>
+                        @foreach (var tag in item.Tags)
+                        {
+                            <span class="badge bg-secondary me-1">@tag.TaggedArtisanProfile.BrandName</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
