@@ -1,0 +1,66 @@
+@* Features/Orders/Views/OrderConfirmation.cshtml *@
+@model Artisans.Core.Entities.Order
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<p>Your order has been placed successfully. Thank you for shopping with us!</p>
+
+<div>
+    <h4>Order Summary</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Order ID</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3">Order Date</dt>
+        <dd class="col-sm-9">@Model.OrderDate.ToString("g")</dd>
+
+        <dt class="col-sm-3">Total Amount</dt>
+        <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
+
+        <dt class="col-sm-3">Shipping Address</dt>
+        <dd class="col-sm-9">
+            @Model.ShippingAddress<br />
+            @Model.ShippingCity, @Model.ShippingPostalCode
+        </dd>
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@Model.Status.ToString()</dd>
+    </dl>
+</div>
+<div>
+    <h5>Items Ordered:</h5>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th class="text-end">Quantity</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@(item.Product?.Name ?? item.Material?.Name ?? "Unknown Item")</td>
+                    <td class="text-end">@item.Quantity</td>
+                    <td class="text-end">@item.UnitPriceAtPurchase.ToString("C")</td>
+                    <td class="text-end">@((item.Quantity * item.UnitPriceAtPurchase).ToString("C"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr/>
+<p>
+    <a asp-controller="Browse" asp-action="Products" class="btn btn-primary">Continue Shopping</a>
+    <a asp-action="MyOrders" class="btn btn-outline-secondary">View My Orders</a>
+</p>
