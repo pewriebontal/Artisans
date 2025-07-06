@@ -1,4 +1,4 @@
-@* Features/Browse/Views/ProductDetails.cshtml *@
+
 @model Artisans.Core.Entities.Product
 @{
     ViewData["Title"] = Model.Name;
@@ -26,7 +26,7 @@
         <p>@Html.Raw(Model.Description.Replace("\n", "<br />"))</p> @* Preserve line breaks *@
         <h3 class="text-primary my-3">@Model.Price.ToString("C")</h3>
         <p>Stock: @Model.StockQuantity</p>
-        @* Add to Cart Button Here Later *@
+
         <a asp-action="Products" class="btn btn-outline-secondary mt-3">Back to Products</a>
     </div>
 </div>

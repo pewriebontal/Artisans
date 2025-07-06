@@ -11,70 +11,80 @@
     <title>@ViewData["Title"] - Artisans</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Artisans.styles.css" asp-append-version="true" /> @* For CSS Isolation *@
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="page-layout">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Artisans</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ARTISANS</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-lg-flex justify-content-between">
+                    <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Browse" asp-action="Products">Products</a>
+                            <a class="nav-link" asp-controller="Browse" asp-action="Products">Collection</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Browse" asp-action="Materials">Materials</a>
+                            <a class="nav-link" asp-controller="Browse" asp-action="Materials">Materials</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="InfluencerFeed" asp-action="Index">For You</a>
+                            <a class="nav-link" asp-controller="InfluencerFeed" asp-action="Index">Inspiration</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Artisan"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="ArtisanProducts" asp-action="Index">My Store</a>
+                                <a class="nav-link" asp-controller="ArtisanProducts" asp-action="Index">Atelier</a>
                             </li>
                         }
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="AdminDashboard" asp-action="Index">Admin</a> @* Placeholder *@
+                                <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">
+                                    <i class="fas fa-crown"></i> Admin
+                                </a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
-                    @* === LOGIN/LOGOUT SECTION === *@
-                    <ul class="navbar-nav"> @* This second ul is for items typically on the right *@
+                    <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Orders" asp-action="MyOrders">My Orders</a>
+                                <a class="nav-link" asp-controller="Orders" asp-action="MyOrders">
+                                    <i class="fas fa-shopping-bag"></i> Orders
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <span class="navbar-text text-dark me-3">Hello @UserManager.GetUserName(User)!</span>
+                                <span class="navbar-text">@UserManager.GetUserName(User)</span>
                             </li>
                             <li class="nav-item">
-                                <form class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                                <form class="d-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                                    <button type="submit" class="nav-link btn btn-link">Logout</button>
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
                     </ul>
@@ -82,20 +92,63 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="main-content">
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer">
         <div class="container">
-            © @DateTime.Now.Year - Artisans - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="font-primary">ARTISANS</h5>
+                    <p class="small">Curating the finest handcrafted pieces from Myanmar's most talented artisans.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small">© @DateTime.Now.Year - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a></p>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+
+    <script>
+
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('.navbar').addClass('navbar-scrolled');
+            } else {
+                $('.navbar').removeClass('navbar-scrolled');
+            }
+        });
+        
+
+        $('a[href^="#"]').on('click', function(event) {
+            var target = $(this.getAttribute('href'));
+            if (target.length) {
+                event.preventDefault();
+                $('html, body').stop().animate({
+                    scrollTop: target.offset().top - 100
+                }, 1000);
+            }
+        });
+        
+
+        $(window).scroll(function() {
+            $('.fade-in-up').each(function() {
+                var elementTop = $(this).offset().top;
+                var elementBottom = elementTop + $(this).outerHeight();
+                var viewportTop = $(window).scrollTop();
+                var viewportBottom = viewportTop + $(window).height();
+                
+                if (elementBottom > viewportTop && elementTop < viewportBottom) {
+                    $(this).addClass('fade-in-up');
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

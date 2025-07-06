@@ -1,4 +1,4 @@
-@* Features/Admin/Views/AdminDashboard/Index.cshtml *@
+
 @{
     ViewData["Title"] = "Admin Dashboard";
     var pendingArtisans = ViewBag.PendingArtisanProfiles as List<Artisans.Core.Entities.ArtisanProfile> ?? new List<Artisans.Core.Entities.ArtisanProfile>();
@@ -44,7 +44,7 @@
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-success">Approve</button>
                                 </form>
-                                @* TODO: Add Reject Artisan Button/Form *@
+
                             </td>
                         </tr>
                     }
@@ -81,7 +81,7 @@
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-success">Approve</button>
                                 </form>
-                                @* TODO: Add Reject Post Button/Form *@
+
                             </td>
                         </tr>
                     }
@@ -108,7 +108,7 @@
                 <td>@user.Email</td>
                 <td>@user.CustomRole.ToString()</td>
                 <td>@(user.IsActive ? "Yes" : "No")</td>
-                @* TODO: Add links to manage user roles/status *@
+
             </tr>
         }
         </tbody>

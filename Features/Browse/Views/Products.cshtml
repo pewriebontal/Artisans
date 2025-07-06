@@ -1,4 +1,4 @@
-@* Features/Browse/Views/Products.cshtml *@
+
 @model IEnumerable<Artisans.Core.Entities.Product>
 @{
     ViewData["Title"] = "Browse Products";
@@ -70,7 +70,7 @@ else
                     </div>
                     <div class="card-footer">
                         <a asp-action="ProductDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">View Details</a>
-                        @* Add to Cart button would go here later *@
+
                     </div>
                 </div>
             </div>
