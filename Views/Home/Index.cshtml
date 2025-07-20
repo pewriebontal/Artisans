@@ -1,0 +1,476 @@
+@model IEnumerable<Artisans.Models.Product>
+
+@{
+    ViewData["Title"] = "ARTISANS - Curated Handcrafted Luxury";
+}
+
+@section Styles {
+    <style>
+        /* Hero Section Override */
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(45deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/images/hero/myanmar-artisans-hero.png') center/cover;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+            z-index: 2;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--primary-white);
+            z-index: 3;
+            position: relative;
+            max-width: 900px;
+            padding: 0 2rem;
+        }
+
+        .hero-pre-title {
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-title {
+            font-family: var(--font-primary);
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 300;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero-title .accent {
+            color: var(--accent-gold);
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-secondary);
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 300;
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        .hero-cta {
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 1.2rem 3rem;
+            font-family: var(--font-secondary);
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease 1.2s both;
+        }
+
+        .hero-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gold);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .hero-cta:hover::before {
+            left: 0;
+        }
+
+        .hero-cta:hover {
+            color: var(--primary-black);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        /* Featured Section */
+        .featured-section {
+            padding: 10rem 0;
+            background: var(--soft-gray);
+        }
+
+        .section-subtitle {
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--medium-gray);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 5rem;
+            color: var(--primary-black);
+            letter-spacing: -2px;
+            text-transform: uppercase;
+        }
+
+        /* Product Grid Enhancement */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 5rem;
+        }
+
+        .product-card {
+            background: var(--primary-white);
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            overflow: hidden;
+            position: relative;
+            border-radius: 0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .product-title {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: var(--primary-black);
+            letter-spacing: -0.5px;
+        }
+
+        .product-artisan {
+            font-family: var(--font-secondary);
+            font-size: 0.85rem;
+            color: var(--medium-gray);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-price {
+            font-family: var(--font-secondary);
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--accent-gold);
+            margin-bottom: 2rem;
+        }
+
+        .btn-view-product {
+            background: var(--primary-black);
+            color: var(--primary-white);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-secondary);
+            font-size: 0.8rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .btn-view-product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gold);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-view-product:hover::before {
+            left: 0;
+        }
+
+        .btn-view-product:hover {
+            color: var(--primary-black);
+            transform: translateY(-2px);
+        }
+
+        .no-products {
+            text-align: center;
+            color: var(--medium-gray);
+            font-family: var(--font-secondary);
+            font-size: 1.1rem;
+            margin: 5rem 0;
+            letter-spacing: 1px;
+        }
+
+        .browse-all-btn {
+            background: transparent;
+            color: var(--primary-black);
+            border: 2px solid var(--primary-black);
+            padding: 1.2rem 3rem;
+            font-family: var(--font-secondary);
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .browse-all-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-black);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .browse-all-btn:hover::before {
+            left: 0;
+        }
+
+        .browse-all-btn:hover {
+            color: var(--primary-white);
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        /* Values Section */
+        .values-section {
+            padding: 8rem 0;
+            background: var(--primary-white);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+        }
+
+        .value-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 2rem;
+        }
+
+        .value-title {
+            font-family: var(--font-primary);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: var(--primary-black);
+            letter-spacing: -0.5px;
+        }
+
+        .value-description {
+            font-family: var(--font-secondary);
+            font-size: 0.95rem;
+            color: var(--medium-gray);
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+
+        @@media (max-width: 768px) {
+            .hero-pre-title {
+                font-size: 0.8rem;
+                letter-spacing: 2px;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-cta {
+                padding: 1rem 2rem;
+                font-size: 0.8rem;
+                letter-spacing: 2px;
+            }
+
+            .featured-section {
+                padding: 6rem 0;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-info {
+                padding: 2rem;
+            }
+
+            .values-section {
+                padding: 6rem 0;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+    </style>
+}
+
+
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-pre-title">Myanmar Heritage</div>
+        <h1 class="hero-title">Artisan <span class="accent">Excellence</span></h1>
+        <p class="hero-subtitle">Centuries of tradition meet contemporary elegance in every handcrafted piece</p>
+        <a href="@Url.Action("Products", "Browse")" class="btn hero-cta">Shop Collection</a>
+    </div>
+</div>
+
+
+<div class="featured-section">
+    <div class="container">
+        <div class="section-subtitle">Curated Selection</div>
+        <h2 class="section-title">Featured Collection</h2>
+        
+        @if (Model != null && Model.Any())
+        {
+            <div class="product-grid">
+                @foreach (var product in Model)
+                {
+                    <div class="product-card fade-in-up">
+                        <img src="@(!string.IsNullOrEmpty(product.MainImageUrl) ? product.MainImageUrl : "/images/products/placeholder.svg")" 
+                             alt="@product.Name" 
+                             class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">@product.Name</h3>
+                            <p class="product-artisan">by @product.ArtisanProfile.BrandName</p>
+                            <div class="product-price">$@product.Price.ToString("F2")</div>
+                            <a href="@Url.Action("ProductDetails", "Browse", new { id = product.Id })" 
+                               class="btn btn-view-product">View Details</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-products">
+                <p>New collections arriving soon.</p>
+                <p>Exceptional artisan pieces are being carefully curated for you.</p>
+            </div>
+        }
+        
+        <div class="text-center">
+            <a href="@Url.Action("Products", "Browse")" class="browse-all-btn">View All Pieces</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="values-section">
+    <div class="container">
+        <div class="values-grid">
+            <div class="value-item fade-in-up">
+                <div class="value-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h4 class="value-title">Artisan Craftsmanship</h4>
+                <p class="value-description">Each piece is meticulously handcrafted by skilled Myanmar artisans using traditional techniques passed down through generations.</p>
+            </div>
+            <div class="value-item fade-in-up">
+                <div class="value-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4 class="value-title">Ethical Sourcing</h4>
+                <p class="value-description">We work directly with local artisans, ensuring fair compensation and supporting the preservation of traditional craftsmanship.</p>
+            </div>
+            <div class="value-item fade-in-up">
+                <div class="value-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h4 class="value-title">Authentic Quality</h4>
+                <p class="value-description">Every item is verified for authenticity and quality, guaranteeing you receive genuine, exceptional artisan work.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        document.body.classList.add('home-page');
+    </script>
+}

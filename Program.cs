@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Artisans.Infrastructure.Data;
-using Artisans.Core.Entities; 
+using Artisans.Models; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,14 +30,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddControllersWithViews()
-    .AddRazorOptions(options =>
-    {
-        options.ViewLocationFormats.Clear();
-        options.ViewLocationFormats.Add("/Features/{1}/Views/{0}.cshtml");
-        options.ViewLocationFormats.Add("/Features/Shared/Views/{0}.cshtml");
-        options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-    });
+builder.Services.AddControllersWithViews();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -107,7 +100,7 @@ async Task SeedIdentityDataAsync(UserManager<User> userManager, RoleManager<Role
             UserName = "admin", 
             Email = adminEmail,
             EmailConfirmed = true, 
-            CustomRole = Artisans.Core.Enums.UserRoleType.Admin,
+            CustomRole = UserRoleType.Admin,
             RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             IsActive = true
         };

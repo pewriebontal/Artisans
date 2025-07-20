@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Artisans.Core.Entities;
+using Artisans.Models;
 
 namespace Artisans.Infrastructure.Data
 {

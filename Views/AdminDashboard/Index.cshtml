@@ -1,0 +1,120 @@
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var pendingArtisans = ViewBag.PendingArtisanProfiles as List<Artisans.Models.ArtisanProfile> ?? new List<Artisans.Models.ArtisanProfile>();
+    var pendingPosts = ViewBag.PendingInfluencerPosts as List<Artisans.Models.InfluencerPost> ?? new List<Artisans.Models.InfluencerPost>();
+    var users = ViewBag.Users as List<Artisans.Models.User> ?? new List<Artisans.Models.User>();
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Pending Artisan Approvals</h4>
+        @if (pendingArtisans.Any())
+        {
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Brand Name</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var profile in pendingArtisans)
+                    {
+                        <tr>
+                            <td>@profile.BrandName</td>
+                            <td>@profile.User?.UserName</td>
+                            <td>@profile.User?.Email</td>
+                            <td>
+                                <form asp-action="ApproveArtisan" asp-route-artisanProfileId="@profile.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No artisan profiles pending approval.</p>
+        }
+    </div>
+    <div class="col-md-6">
+        <h4>Pending Influencer Post Approvals</h4>
+        @if (pendingPosts.Any())
+        {
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Caption</th>
+                        <th>Influencer</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var post in pendingPosts)
+                    {
+                        <tr>
+                            <td><img src="@post.ImageUrl" style="max-width:70px; max-height:70px; object-fit:cover;" alt="Post by @post.InfluencerUser?.UserName" /></td>
+                            <td>@post.Caption</td>
+                            <td>@post.InfluencerUser?.UserName</td>
+                            <td>
+                                <form asp-action="ApproveInfluencerPost" asp-route-postId="@post.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No influencer posts pending approval.</p>
+        }
+    </div>
+</div>
+<hr />
+<h4>User Management (Basic List)</h4>
+@if (users.Any())
+{
+    <table class="table table-sm">
+        <thead><tr><th>Username</th><th>Email</th><th>Custom Role</th><th>Active</th></tr></thead>
+        <tbody>
+        @foreach(var user in users)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.CustomRole.ToString()</td>
+                <td>@(user.IsActive ? "Yes" : "No")</td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No users found (besides initial admin if filtered out).</p>
+}

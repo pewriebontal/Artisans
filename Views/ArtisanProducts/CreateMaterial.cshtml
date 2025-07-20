@@ -1,0 +1,77 @@
+@model Artisans.Models.MaterialViewModel
+@{
+    ViewData["Title"] = "Add New Material";
+}
+
+<h2>@ViewData["Title"]</h2>
+<h4>Material Details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="CreateMaterial" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name"></label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <label asp-for="Description"></label>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="PricePerUnit" class="form-control" />
+                        <label asp-for="PricePerUnit"></label>
+                        <span asp-validation-for="PricePerUnit" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="UnitOfMeasure" class="form-control" />
+                        <label asp-for="UnitOfMeasure"></label>
+                        <span asp-validation-for="UnitOfMeasure" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+             <div class="form-floating mb-3">
+                <input asp-for="StockQuantity" class="form-control" />
+                <label asp-for="StockQuantity"></label>
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+                    <option value="">-- Select Category (Optional) --</option>
+                </select>
+                <label asp-for="CategoryId"></label>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://example.com/material_image.jpg" />
+                <label asp-for="ImageUrl"></label>
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                <label class="form-check-label" asp-for="IsActive"></label>
+            </div>
+
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Create Material</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
