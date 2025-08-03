@@ -1,47 +1,62 @@
-
 @model Artisans.Models.CreatePostViewModel
 @{
     ViewData["Title"] = "Create New Showcase Post";
 }
 
-<h2>@ViewData["Title"]</h2>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="container-fluid page-header-container">
+    <div class="container">
+        <h1 class="page-header-title">Create a New Post</h1>
+        <p class="page-header-subtitle">Share your style and tag the brands you love.</p>
+    </div>
+</div>
 
-            <div class="form-floating mb-3">
-                <input asp-for="ImageUrl" class="form-control" />
-                <label asp-for="ImageUrl"></label>
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form asp-action="Create" method="post" class="dashboard-form-card">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
 
-            <div class="form-floating mb-3">
-                <textarea asp-for="Caption" class="form-control" rows="3"></textarea>
-                <label asp-for="Caption"></label>
-                <span asp-validation-for="Caption" class="text-danger"></span>
-            </div>
+                <h4 class="form-section-title">Post Details</h4>
+                <div class="form-floating mb-3">
+                    <input asp-for="ImageUrl" class="form-control" placeholder="Image URL" />
+                    <label asp-for="ImageUrl"></label>
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
 
-            <div class="form-floating mb-3">
-                <select asp-for="TaggedArtisanProfileId1" class="form-select" asp-items="ViewBag.AvailableArtisanProfiles">
-                    <option value="">-- Tag an Artisan (Optional) --</option>
-                </select>
-                <label asp-for="TaggedArtisanProfileId1"></label>
-            </div>
-            
-            <div class="form-floating mb-3">
-                <select asp-for="TaggedArtisanProfileId2" class="form-select" asp-items="ViewBag.AvailableArtisanProfiles">
-                    <option value="">-- Tag another Artisan (Optional) --</option>
-                </select>
-                <label asp-for="TaggedArtisanProfileId2"></label>
-            </div>
+                <div class="form-floating mb-3">
+                    <textarea asp-for="Caption" class="form-control" placeholder="Write a caption..." style="height: 120px;"></textarea>
+                    <label asp-for="Caption"></label>
+                    <span asp-validation-for="Caption" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mt-3">
-                <button type="submit" class="btn btn-primary">Submit Post for Approval</button>
-                <a asp-action="MyPosts" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+                <h4 class="form-section-title mt-4">Tag Brands</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select asp-for="TaggedArtisanProfileId1" class="form-select" asp-items="ViewBag.AvailableArtisanProfiles">
+                                <option value="">-- Tag an Artisan --</option>
+                            </select>
+                            <label asp-for="TaggedArtisanProfileId1"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select asp-for="TaggedArtisanProfileId2" class="form-select" asp-items="ViewBag.AvailableArtisanProfiles">
+                                <option value="">-- Tag another Artisan --</option>
+                            </select>
+                            <label asp-for="TaggedArtisanProfileId2"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+                
+                <div class="d-flex justify-content-end">
+                    <a asp-action="MyPosts" class="btn btn-outline-secondary me-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit for Approval</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

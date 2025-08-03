@@ -3,47 +3,51 @@
     ViewData["Title"] = "Log in";
 }
 
-<h2>@ViewData["Title"]</h2>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="UserNameOrEmail" class="form-control" />
-                    <label asp-for="UserNameOrEmail"></label>
-                    <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="auth-card">
+                <div class="auth-header text-center">
+                    <h1 class="auth-title">Welcome Back</h1>
+                    <p class="auth-subtitle">Log in to access your account and explore.</p>
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Password" class="form-control" />
-                    <label asp-for="Password"></label>
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="auth-body">
+                    <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="UserNameOrEmail" class="form-control" placeholder="Username or Email" />
+                            <label asp-for="UserNameOrEmail"></label>
+                            <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Password" class="form-control" placeholder="Password" />
+                            <label asp-for="Password"></label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="RememberMe" />
+                                <label class="form-check-label" asp-for="RememberMe">
+                                    @Html.DisplayNameFor(m => m.RememberMe)
+                                </label>
+                            </div>
+                            @* <a asp-action="ForgotPassword" class="form-link">Forgot password?</a> *@
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Log In</button>
+                        </div>
+                    </form>
+
+                    <div class="auth-footer text-center mt-4">
+                        <p>Don't have an account? <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-link">Register here</a></p>
+                    </div>
                 </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="RememberMe">
-                        <input asp-for="RememberMe" />
-                        @Html.DisplayNameFor(m => m.RememberMe)
-                    </label>
-                </div>
-                <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div class="mt-3">
-                    <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user</a>
-                    </p>
-                    @* <p>
-                        <a asp-action="ForgotPassword">Forgot your password?</a>
-                    </p> *@
-                </div>
-            </form>
-        </section>
+            </div>
+        </div>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

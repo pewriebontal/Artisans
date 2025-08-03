@@ -1,32 +1,56 @@
-
 @model Artisans.Models.Material
+
 @{
     ViewData["Title"] = Model.Name;
 }
 
-<h1>@Html.DisplayFor(model => model.Name)</h1>
-<p class="text-muted">By <a asp-action="ArtisanStore" asp-route-id="@Model.SupplierArtisanProfileId">@Model.SupplierArtisanProfile.BrandName</a>
-    @if(Model.Category != null) { <span>in <a asp-action="Materials" asp-route-categoryId="@Model.CategoryId">@Model.Category.Name</a></span> }
-</p>
+<div class="container product-detail-container">
+    <div class="row align-items-center">
+        <div class="col-lg-7 mb-4 mb-lg-0">
+            <img src="@(!string.IsNullOrEmpty(Model.ImageUrl) ? Model.ImageUrl : "/images/materials/placeholder.svg")" 
+                 alt="@Model.Name" 
+                 class="product-detail-image">
+        </div>
+        <div class="col-lg-5">
+            <h1 class="product-detail-title">@Model.Name</h1>
+            <p class="mb-3">
+                <a asp-action="ArtisanStore" asp-route-id="@Model.SupplierArtisanProfileId" class="product-detail-artisan-link">
+                    Supplied by @Model.SupplierArtisanProfile.BrandName
+                </a>
+                @if(Model.Category != null) 
+                { 
+                    <span class="text-muted"> in 
+                        <a asp-action="Materials" asp-route-categoryId="@Model.CategoryId" class="product-detail-artisan-link">@Model.Category.Name</a>
+                    </span> 
+                }
+            </p>
+            
+            <p class="product-detail-description">
+                @Html.Raw(Model.Description?.Replace("\n", "<br />"))
+            </p>
 
-<hr />
-<div class="row">
-    <div class="col-md-7">
-        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-        {
-            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded mb-3" />
-        }
-        else
-        {
-            <img src="https://via.placeholder.com/600x400.png?text=No+Image" class="img-fluid rounded mb-3" alt="No Image Available" />
-        }
-    </div>
-    <div class="col-md-5">
-        <h4>Details</h4>
-        <p>@Html.Raw(Model.Description?.Replace("\n", "<br />"))</p>
-        <h3 class="text-primary my-3">@Model.PricePerUnit.ToString("C") per @Model.UnitOfMeasure</h3>
-        <p>Stock: @Model.StockQuantity</p>
+            <div class="product-detail-price">
+                @Model.PricePerUnit.ToString("C") / @Model.UnitOfMeasure
+            </div>
 
-        <a asp-action="Materials" class="btn btn-outline-secondary mt-3">Back to Materials</a>
+            <p class="product-detail-stock @(Model.StockQuantity > 0 ? "" : "out-of-stock")">
+                @(Model.StockQuantity > 0 ? $"{Model.StockQuantity} in stock" : "Out of Stock")
+            </p>
+
+            <form asp-controller="Orders" asp-action="AddToCart" method="post" class="mt-4">
+                <input type="hidden" name="itemId" value="@Model.Id" />
+                <input type="hidden" name="itemType" value="Material" />
+                <div class="input-group" style="max-width: 400px;">
+                    <input type="number" name="quantity" class="form-control text-center" value="1" min="1" max="@Model.StockQuantity">
+                    <button type="submit" class="btn btn-add-to-cart" disabled="@(Model.StockQuantity <= 0)">
+                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                    </button>
+                </div>
+            </form>
+
+            <a asp-action="Materials" class="btn btn-outline-secondary mt-4">
+                <i class="fas fa-arrow-left me-2"></i> Back to Materials
+            </a>
+        </div>
     </div>
 </div>

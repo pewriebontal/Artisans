@@ -116,15 +116,33 @@
 
     <script>
 
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > 100) {
-                $('.navbar').addClass('navbar-scrolled');
-            } else {
-                $('.navbar').removeClass('navbar-scrolled');
+        // Navbar scroll behavior
+        $(document).ready(function() {
+            // Check if we're on the home page
+            var isHomePage = $('body').hasClass('home-page');
+            
+            // Set initial navbar state
+            if (isHomePage) {
+                $('.navbar').addClass('home-page');
             }
+            
+            // Handle scroll events
+            $(window).scroll(function() {
+                var scrollTop = $(this).scrollTop();
+                
+                if (scrollTop > 50) {
+                    $('.navbar').addClass('navbar-scrolled');
+                } else {
+                    $('.navbar').removeClass('navbar-scrolled');
+                }
+            });
+            
+            // Trigger scroll event on page load to set initial state
+            $(window).trigger('scroll');
         });
         
 
+        // Smooth scrolling for anchor links
         $('a[href^="#"]').on('click', function(event) {
             var target = $(this.getAttribute('href'));
             if (target.length) {
@@ -136,6 +154,7 @@
         });
         
 
+        // Fade in animations
         $(window).scroll(function() {
             $('.fade-in-up').each(function() {
                 var elementTop = $(this).offset().top;

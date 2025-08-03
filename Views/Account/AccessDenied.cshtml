@@ -2,7 +2,24 @@
     ViewData["Title"] = "Access Denied";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have permission to view this resource.</p>
-</header>
+<div class="container my-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="auth-card" style="padding: 4rem 2rem;">
+                 <div class="auth-header">
+                    <div style="font-size: 4rem; color: var(--accent-gold);">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h1 class="auth-title mt-3">Access Denied</h1>
+                    <p class="auth-subtitle">You do not have the necessary permissions to view this page.</p>
+                </div>
+                <div class="auth-body mt-4">
+                    <p>If you believe you should have access, please contact an administrator.</p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">
+                        <i class="fas fa-home me-2"></i> Return to Homepage
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

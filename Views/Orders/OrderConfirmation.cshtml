@@ -1,66 +1,68 @@
-
 @model Artisans.Models.Order
 @{
     ViewData["Title"] = "Order Confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="auth-card">
+                <div class="auth-header text-center">
+                     <div style="font-size: 4rem; color: #198754;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h1 class="auth-title mt-3">Thank You For Your Order!</h1>
+                    <p class="auth-subtitle">Your order has been placed successfully. A confirmation has been sent to your email.</p>
+                </div>
+                <div class="auth-body">
+                    <h4 class="form-section-title">Order Summary - #@Model.Id</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Order Date:</strong> @Model.OrderDate.ToString("g") <br>
+                            <strong>Total Amount:</strong> @Model.TotalAmount.ToString("C") <br>
+                            <strong>Status:</strong> <span class="badge bg-info text-dark">@Model.Status.ToString()</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Shipping Address:</strong><br>
+                            @Model.ShippingAddress<br />
+                            @Model.ShippingCity, @Model.ShippingPostalCode
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-
-<p>Your order has been placed successfully. Thank you for shopping with us!</p>
-
-<div>
-    <h4>Order Summary</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">Order ID</dt>
-        <dd class="col-sm-9">@Model.Id</dd>
-
-        <dt class="col-sm-3">Order Date</dt>
-        <dd class="col-sm-9">@Model.OrderDate.ToString("g")</dd>
-
-        <dt class="col-sm-3">Total Amount</dt>
-        <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
-
-        <dt class="col-sm-3">Shipping Address</dt>
-        <dd class="col-sm-9">
-            @Model.ShippingAddress<br />
-            @Model.ShippingCity, @Model.ShippingPostalCode
-        </dd>
-        <dt class="col-sm-3">Status</dt>
-        <dd class="col-sm-9">@Model.Status.ToString()</dd>
-    </dl>
+                    <h5 class="mb-3">Items Ordered:</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Item</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td>@(item.Product?.Name ?? item.Material?.Name ?? "Unknown Item")</td>
+                                        <td class="text-center">@item.Quantity</td>
+                                        <td class="text-end">@item.UnitPriceAtPurchase.ToString("C")</td>
+                                        <td class="text-end"><strong>@((item.Quantity * item.UnitPriceAtPurchase).ToString("C"))</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <hr class="my-4"/>
+                    <div class="text-center">
+                        <a asp-controller="Browse" asp-action="Products" class="btn btn-outline-secondary">Continue Shopping</a>
+                        <a asp-action="MyOrders" class="btn btn-primary">View My Orders</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <h5>Items Ordered:</h5>
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th class="text-end">Quantity</th>
-                <th class="text-end">Price</th>
-                <th class="text-end">Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OrderItems)
-            {
-                <tr>
-                    <td>@(item.Product?.Name ?? item.Material?.Name ?? "Unknown Item")</td>
-                    <td class="text-end">@item.Quantity</td>
-                    <td class="text-end">@item.UnitPriceAtPurchase.ToString("C")</td>
-                    <td class="text-end">@((item.Quantity * item.UnitPriceAtPurchase).ToString("C"))</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-<hr/>
-<p>
-    <a asp-controller="Browse" asp-action="Products" class="btn btn-primary">Continue Shopping</a>
-    <a asp-action="MyOrders" class="btn btn-outline-secondary">View My Orders</a>
-</p>

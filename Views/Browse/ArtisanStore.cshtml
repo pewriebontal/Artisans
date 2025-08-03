@@ -1,4 +1,3 @@
-
 @model Artisans.Models.ArtisanDashboardViewModel 
 @{
     ViewData["Title"] = Model.ArtisanProfile?.BrandName + " - Storefront";
@@ -6,97 +5,97 @@
 
 @if (Model.ArtisanProfile == null)
 {
-    <h1>Artisan Not Found</h1>
-    <p>Sorry, the artisan you are looking for could not be found or their profile is not approved.</p>
-    <a asp-action="Products" asp-controller="Browse" class="btn btn-primary">Browse All Products</a>
+    <div class="container text-center py-5">
+        <h1 class="page-header-title">Artisan Not Found</h1>
+        <p class="page-header-subtitle">Sorry, the artisan you are looking for could not be found or their profile is not approved.</p>
+        <a asp-action="Products" asp-controller="Browse" class="btn btn-primary mt-3">Browse All Products</a>
+    </div>
     return;
 }
 
-<div class="text-center mb-4">
-    @if(!string.IsNullOrEmpty(Model.ArtisanProfile.ProfilePictureUrl))
+<!-- Artisan Header -->
+<div class="container-fluid page-header-container">
+    <div class="container text-center">
+        @if(!string.IsNullOrEmpty(Model.ArtisanProfile.ProfilePictureUrl))
+        {
+            <img src="@Model.ArtisanProfile.ProfilePictureUrl" alt="@Model.ArtisanProfile.BrandName" class="artisan-profile-pic mb-3" />
+        }
+        else
+        {
+            <img src="/images/artisans/placeholder.svg" alt="@Model.ArtisanProfile.BrandName" class="artisan-profile-pic mb-3" />
+        }
+        <h1 class="page-header-title">@Model.ArtisanProfile.BrandName</h1>
+        @if(!string.IsNullOrEmpty(Model.ArtisanProfile.Bio))
+        {
+            <p class="page-header-subtitle">@Html.Raw(Model.ArtisanProfile.Bio.Replace("\n", "<br />"))</p>
+        }
+    </div>
+</div>
+
+<div class="container mt-5">
+    <!-- Products Section -->
+    <h2 class="section-title-underline">Products from @Model.ArtisanProfile.BrandName</h2>
+    @if (!Model.Products.Any())
     {
-        <img src="@Model.ArtisanProfile.ProfilePictureUrl" alt="@Model.ArtisanProfile.BrandName" class="img-thumbnail rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;" />
+        <p class="text-center my-5 text-muted">This artisan has not listed any products yet.</p>
     }
-    <h1>@Model.ArtisanProfile.BrandName</h1>
-    @if(!string.IsNullOrEmpty(Model.ArtisanProfile.Bio))
+    else
     {
-        <p class="lead">@Html.Raw(Model.ArtisanProfile.Bio.Replace("\n", "<br />"))</p>
+        <div class="product-grid mb-5">
+            @foreach (var item in Model.Products)
+            {
+                <div class="product-card fade-in-up">
+                    <a asp-controller="Browse" asp-action="ProductDetails" asp-route-id="@item.Id" class="product-card-link">
+                        <img src="@(!string.IsNullOrEmpty(item.MainImageUrl) ? item.MainImageUrl : "/images/products/placeholder.jpg")"
+                             alt="@item.Name"
+                             class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">@item.Name</h3>
+                            @if(item.Category != null)
+                            {
+                                <span class="badge bg-secondary mb-2">@item.Category.Name</span>
+                            }
+                            <div class="product-price">@item.Price.ToString("C")</div>
+                        </div>
+                    </a>
+                    <div class="product-card-footer">
+                        <a asp-controller="Browse" asp-action="ProductDetails" asp-route-id="@item.Id" class="btn btn-view-product">View Details</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Materials Section -->
+    <h2 class="section-title-underline">Materials from @Model.ArtisanProfile.BrandName</h2>
+    @if (!Model.Materials.Any())
+    {
+        <p class="text-center my-5 text-muted">This artisan has not listed any materials yet.</p>
+    }
+    else
+    {
+         <div class="product-grid">
+            @foreach (var item in Model.Materials)
+            {
+                <div class="product-card fade-in-up">
+                    <a asp-controller="Browse" asp-action="MaterialDetails" asp-route-id="@item.Id" class="product-card-link">
+                        <img src="@(!string.IsNullOrEmpty(item.ImageUrl) ? item.ImageUrl : "/images/materials/placeholder.svg")"
+                             alt="@item.Name"
+                             class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">@item.Name</h3>
+                             @if(item.Category != null)
+                            {
+                                <span class="badge bg-secondary mb-2">@item.Category.Name</span>
+                            }
+                            <div class="product-price">@item.PricePerUnit.ToString("C") / @item.UnitOfMeasure</div>
+                        </div>
+                    </a>
+                    <div class="product-card-footer">
+                        <a asp-controller="Browse" asp-action="MaterialDetails" asp-route-id="@item.Id" class="btn btn-view-product">View Details</a>
+                    </div>
+                </div>
+            }
+        </div>
     }
 </div>
-<hr/>
-
-<h2>Products from @Model.ArtisanProfile.BrandName</h2>
-@if (!Model.Products.Any())
-{
-    <p>This artisan has not listed any products yet.</p>
-}
-else
-{
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @foreach (var item in Model.Products)
-        {
-            <div class="col">
-                <div class="card h-100">
-                    @if (!string.IsNullOrEmpty(item.MainImageUrl))
-                    {
-                        <img src="@item.MainImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
-                    }
-                    else
-                    {
-                        <img src="https://via.placeholder.com/300x200.png?text=No+Image" class="card-img-top" alt="No Image Available" style="height: 200px; object-fit: cover;">
-                    }
-                    <div class="card-body">
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                         @if(item.Category != null)
-                        {
-                            <span class="badge bg-secondary mb-2">@item.Category.Name</span>
-                        }
-                        <p class="card-text lead">@item.Price.ToString("C")</p>
-                    </div>
-                    <div class="card-footer">
-                        <a asp-controller="Browse" asp-action="ProductDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
-
-<hr class="my-4"/>
-
-<h2>Materials from @Model.ArtisanProfile.BrandName</h2>
-@if (!Model.Materials.Any())
-{
-    <p>This artisan has not listed any materials yet.</p>
-}
-else
-{
-     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @foreach (var item in Model.Materials)
-        {
-            <div class="col">
-                <div class="card h-100">
-                     @if (!string.IsNullOrEmpty(item.ImageUrl))
-                    {
-                        <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
-                    }
-                    else
-                    {
-                        <img src="https://via.placeholder.com/300x200.png?text=No+Image" class="card-img-top" alt="No Image Available" style="height: 200px; object-fit: cover;">
-                    }
-                    <div class="card-body">
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                        @if(item.Category != null)
-                        {
-                            <span class="badge bg-secondary mb-2">@item.Category.Name</span>
-                        }
-                        <p class="card-text lead">@item.PricePerUnit.ToString("C") per @item.UnitOfMeasure</p>
-                    </div>
-                    <div class="card-footer">
-                        <a asp-controller="Browse" asp-action="MaterialDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}

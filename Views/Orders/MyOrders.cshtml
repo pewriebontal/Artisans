@@ -1,42 +1,57 @@
-
 @model IEnumerable<Artisans.Models.Order>
 @{
     ViewData["Title"] = "My Orders";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container-fluid page-header-container">
+    <div class="container">
+        <h1 class="page-header-title">My Orders</h1>
+        <p class="page-header-subtitle">View your order history and check the status of your purchases.</p>
+    </div>
+</div>
 
-@if (!Model.Any())
-{
-    <p>You have not placed any orders yet.</p>
-}
-else
-{
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Date</th>
-                <th class="text-end">Total</th>
-                <th>Status</th>
-                <th>Shipping Address</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
-                <tr>
-                    <td>@order.Id</td>
-                    <td>@order.OrderDate.ToString("g")</td>
-                    <td class="text-end">@order.TotalAmount.ToString("C")</td>
-                    <td>@order.Status.ToString()</td>
-                    <td>@order.ShippingAddress, @order.ShippingCity</td>
-                    <td>
-                        <a asp-action="OrderConfirmation" asp-route-id="@order.Id" class="btn btn-sm btn-outline-info">View Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<div class="container my-5">
+    <div class="card shadow-sm">
+        @if (!Model.Any())
+        {
+            <div class="card-body text-center p-5">
+                <p class="text-muted">You have not placed any orders yet.</p>
+                 <a asp-controller="Browse" asp-action="Products" class="btn btn-primary mt-3">Start Shopping</a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover table-align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th class="text-end">Total</th>
+                            <th>Status</th>
+                            <th>Shipping Address</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>#@order.Id</td>
+                                <td>@order.OrderDate.ToString("g")</td>
+                                <td class="text-end">@order.TotalAmount.ToString("C")</td>
+                                <td>
+                                    <span class="badge bg-info text-dark">@order.Status.ToString()</span>
+                                </td>
+                                <td>@order.ShippingAddress, @order.ShippingCity</td>
+                                <td class="text-end">
+                                    <a asp-action="OrderConfirmation" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary">View Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

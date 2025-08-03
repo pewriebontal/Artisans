@@ -3,62 +3,81 @@
     ViewData["Title"] = "Register";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<div class="row">
-    <div class="col-md-6">
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="UserName" class="form-control" />
-                <label asp-for="UserName"></label>
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Email" class="form-control" />
-                <label asp-for="Email"></label>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Password" class="form-control" />
-                <label asp-for="Password"></label>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <label asp-for="ConfirmPassword"></label>
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-
-            <div class="form-floating mb-3">
-                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Artisans.Models.UserRoleType>()"
-                    class="form-control">
-                    <option value="">-- Select Role --</option>
-                </select>
-                <label asp-for="Role"></label>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-
-
-            <div id="artisanFields" style="display: none;"> @* Initially hidden, show with JS if Role == Artisan *@
-                <hr />
-                <h5>Artisan Details (if applicable)</h5>
-                <div class="form-floating mb-3">
-                    <input asp-for="BrandName" class="form-control" />
-                    <label asp-for="BrandName"></label>
-                    <span asp-validation-for="BrandName" class="text-danger"></span>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-9">
+            <div class="auth-card">
+                <div class="auth-header text-center">
+                    <h1 class="auth-title">Create Your Account</h1>
+                    <p class="auth-subtitle">Join our community of artisans and art lovers.</p>
                 </div>
-                <div class="form-floating mb-3">
-                    <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
-                    <label asp-for="Bio"></label>
-                    <span asp-validation-for="Bio" class="text-danger"></span>
+                <div class="auth-body">
+                    <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="UserName" class="form-control" placeholder="Username" />
+                            <label asp-for="UserName"></label>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" placeholder="Email" />
+                            <label asp-for="Email"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Password" class="form-control" placeholder="Password" />
+                                    <label asp-for="Password"></label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                                    <label asp-for="ConfirmPassword"></label>
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select asp-for="Role" asp-items="Html.GetEnumSelectList<Artisans.Models.UserRoleType>()" class="form-select">
+                                <option value="">-- Select Role --</option>
+                            </select>
+                            <label asp-for="Role"></label>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        
+                        <div id="artisanFields" style="display: none;">
+                            <hr class="my-4">
+                            <h5 class="text-center mb-3" style="font-family: var(--font-primary);">Artisan Details</h5>
+                            <div class="form-floating mb-3">
+                                <input asp-for="BrandName" class="form-control" placeholder="Brand Name" />
+                                <label asp-for="BrandName"></label>
+                                <span asp-validation-for="BrandName" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <textarea asp-for="Bio" class="form-control" placeholder="Short Bio" style="height: 100px"></textarea>
+                                <label asp-for="Bio"></label>
+                                <span asp-validation-for="Bio" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                        </div>
+                    </form>
+
+                     <div class="auth-footer text-center mt-4">
+                        <p>Already have an account? <a asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-link">Log in</a></p>
+                    </div>
                 </div>
             </div>
-
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -67,14 +86,18 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#Role').change(function () {
-                if ($(this).val() == '@((int)Artisans.Models.UserRoleType.Artisan)') { 
-                    $('#artisanFields').show();
+                // Use 'Artisan' (the string representation) for comparison, which is more robust
+                if ($(this).find('option:selected').text() === 'Artisan') { 
+                    $('#artisanFields').slideDown();
                 } else {
-                    $('#artisanFields').hide();
+                    $('#artisanFields').slideUp();
                     $('#BrandName').val(''); 
                     $('#Bio').val('');
                 }
-            }).trigger('change'); 
+            });
+            
+            // Trigger change on load to set initial state
+            $('#Role').trigger('change'); 
         });
     </script>
 }

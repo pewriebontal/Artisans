@@ -1,49 +1,68 @@
-
 @model IEnumerable<Artisans.Models.InfluencerPost>
 @{
     ViewData["Title"] = "My Submitted Posts";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p><a asp-action="Create" class="btn btn-primary">Create New Post</a></p>
+<div class="container-fluid page-header-container">
+    <div class="container">
+        <h1 class="page-header-title">My Posts</h1>
+        <p class="page-header-subtitle">Manage your submitted posts and see their approval status.</p>
+    </div>
+</div>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
+<div class="container my-5">
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-2"></i> Create New Post</a>
+    </div>
 
-@if (!Model.Any())
-{
-    <p>You haven't submitted any posts yet.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Caption</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Tagged Brands</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td><img src="@item.ImageUrl" alt="Post image" style="width: 100px; height: auto;" /></td>
-                    <td>@Html.DisplayFor(modelItem => item.Caption)</td>
-                    <td>@(item.IsApproved ? "Approved" : "Pending Approval")</td>
-                    <td>@item.UploadTimestamp.ToShortDateString()</td>
-                    <td>
-                        @foreach (var tag in item.Tags)
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="card shadow-sm">
+        @if (!Model.Any())
+        {
+            <div class="card-body text-center p-5">
+                <p class="text-muted">You haven't submitted any posts yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover table-align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Image</th>
+                            <th>Caption</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Tagged Brands</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
-                            <span class="badge bg-secondary me-1">@tag.TaggedArtisanProfile.BrandName</span>
+                            <tr>
+                                <td><img src="@item.ImageUrl" alt="Post image" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" /></td>
+                                <td style="max-width: 300px;">@Html.DisplayFor(modelItem => item.Caption)</td>
+                                <td>
+                                    <span class="badge @(item.IsApproved ? "bg-success" : "bg-warning text-dark")">
+                                        @(item.IsApproved ? "Approved" : "Pending")
+                                    </span>
+                                </td>
+                                <td>@item.UploadTimestamp.ToShortDateString()</td>
+                                <td>
+                                    @foreach (var tag in item.Tags)
+                                    {
+                                        <span class="badge bg-light text-dark me-1">@tag.TaggedArtisanProfile.BrandName</span>
+                                    }
+                                </td>
+                            </tr>
                         }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

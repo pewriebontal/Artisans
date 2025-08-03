@@ -37,6 +37,8 @@ body {
   letter-spacing: 0.3px;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
@@ -51,18 +53,19 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 9999;
   transition: all 0.4s ease;
   transform: translateY(0);
 }
 
 /* Transparent navbar for home page only */
 .home-page .navbar {
-  background: transparent !important;
-  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(5px);
   border-bottom: none;
   box-shadow: none;
   padding: 1.5rem 0;
+  z-index: 9999;
 }
 
 .navbar-scrolled {
@@ -86,6 +89,7 @@ body {
 /* White text for home page */
 .home-page .navbar-brand {
   color: var(--primary-white) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-scrolled .navbar-brand {
@@ -112,6 +116,7 @@ body {
 /* White text for home page */
 .home-page .navbar-nav .nav-link {
   color: var(--primary-white) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-scrolled .navbar-nav .nav-link {
@@ -162,7 +167,8 @@ body {
 
 /* White border for home page */
 .home-page .navbar-toggler {
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-scrolled .navbar-toggler {
@@ -426,7 +432,7 @@ body {
   background: var(--primary-black);
   color: var(--primary-white);
   padding: 3rem 0 1rem;
-  margin-top: 0;
+  margin-top: auto;
   position: relative;
   z-index: 10;
 }
@@ -662,6 +668,7 @@ body {
 
 /* ===== MAIN LAYOUT ===== */
 main {
+  flex: 1;
   position: relative;
   z-index: 1;
 }
@@ -675,4 +682,10 @@ main {
 
 .main-content {
   flex: 1;
+  padding-top: 120px;
+}
+
+/* Remove padding for home page since hero section should be full height */
+.home-page .main-content {
+  padding-top: 0;
 }
